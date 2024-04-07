@@ -13,10 +13,10 @@ export default function AddTodoForm() {
   }, [isSubmitting]);
 
   return (
-    <Form replace ref={formRef} method="post">
+    <Form ref={formRef} method="post">
       <input id="text" name="text" type="text" placeholder="write something " />
       <button id="submit-button" name="submit-button" type="submit">
-        {isSubmitting ? "submitting" : "add"}
+        add
       </button>
     </Form>
   );

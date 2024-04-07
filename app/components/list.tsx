@@ -1,4 +1,4 @@
-import { useFetcher, useLoaderData } from "@remix-run/react";
+import { useFetcher, useLoaderData, useNavigation } from "@remix-run/react";
 
 function ListItem({ item }) {
   const fetcher = useFetcher();
@@ -6,8 +6,9 @@ function ListItem({ item }) {
     fetcher.submit({ id: id }, { method: "delete", action: `/?index` });
   }
   const isDeleting = fetcher.state !== "idle";
+
   return (
-    <li>
+    <li hidden={isDeleting}>
       <span>{item.text}</span>
       <button
         onClick={() => deleteExpenseItemHandler(item.id)}
@@ -15,7 +16,7 @@ function ListItem({ item }) {
           marginLeft: "15px",
         }}
       >
-        {isDeleting ? "deleting..." : "delete"}
+        delete
       </button>
     </li>
   );
@@ -23,11 +24,16 @@ function ListItem({ item }) {
 
 export default function TodoList() {
   const data = useLoaderData();
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state !== "idle";
   return (
     <ul>
       {data?.map((item) => (
         <ListItem key={`data_${item.id}`} item={item} />
       ))}
+      {isSubmitting && (
+        <ListItem item={{ text: navigation.formData?.get("text") }} />
+      )}
     </ul>
   );
 }
